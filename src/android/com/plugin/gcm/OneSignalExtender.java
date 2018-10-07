@@ -4,9 +4,34 @@ import android.util.Log;
 public class OneSignalExtender extends NotificationExtenderService {
    @Override
    protected boolean onNotificationProcessing(OSNotificationReceivedResult receivedResult) {
-     	// Read properties from result.
-     	Log.i("console received stuff "+receivedResult.toString());
-      // Return true to stop the notification from displaying.
-      return false;
-   }
+   Log.d("OneSignal", "onNotificationProcessing");
+        JSONObject data = receivedResult.payload.additionalData;
+        boolean silent = false;
+
+        try {
+            if (data.has("content_available")) {
+                silent = data.getBoolean("content_available");
+                if (silent) {
+                    receivedResult.payload.title = "";
+                    receivedResult.payload.body = "";
+                    receivedResult.payload.lockScreenVisibility = Integer.parseInt("-1");
+                    OverrideSettings overrideSettings = new OverrideSettings();
+                    overrideSettings.androidNotificationId = -1;
+                    overrideSettings.extender = new NotificationCompat.Extender() {
+                        @Override
+                        public NotificationCompat.Builder extend(NotificationCompat.Builder builder) {
+                            builder = builder.setVisibility(Integer.parseInt("-1"));
+                            builder = builder.setVibrate(new long[]{0L});
+                            return builder;
+                        }
+                    };
+                    OSNotificationDisplayedResult displayedResult = displayNotification(overrideSettings);
+                }
+            }
+        }
+        catch (JSONException e) {
+            Log.e("OneSignal", "onNotificationProcessingFailure: " + e.getMessage());
+        }
+        return silent;
+    }
 }
