@@ -1,7 +1,8 @@
 import com.onesignal.OSNotificationPayload;
 import com.onesignal.NotificationExtenderService;
 import android.util.Log;
-
+import com.onesignal.OSNotificationReceivedResult;
+import com.onesignal.OSNotificationDisplayedResult;
 import java.math.BigInteger;
 
 import org.json.JSONObject;
