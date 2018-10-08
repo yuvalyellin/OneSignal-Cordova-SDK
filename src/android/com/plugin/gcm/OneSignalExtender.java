@@ -1,3 +1,5 @@
+package com.plugin.gcm;
+
 import com.onesignal.OSNotificationPayload;
 import com.onesignal.NotificationExtenderService;
 import android.util.Log;
@@ -9,6 +11,7 @@ import org.json.JSONObject;
 import org.json.JSONException;
 
 import android.support.v4.app.NotificationCompat;
+
 public class OneSignalExtender extends NotificationExtenderService {
    @Override
    protected boolean onNotificationProcessing(OSNotificationReceivedResult receivedResult) {
